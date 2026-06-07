@@ -1,0 +1,49 @@
+# Node dependencies
+node_modules/
+
+# dotenv environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Runtime files
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage and test output
+.nyc_output/
+coverage/
+
+# Build outputs
+dist/
+build/
+.tmp/
+.temp/
+
+# Caches
+.cache/
+.parcel-cache/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+.DS_Store
+
+# Misc
+*.local
+
+/.github
+
+PROJECT_OBJECTIVES.md
