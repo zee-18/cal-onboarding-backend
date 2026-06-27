@@ -36,6 +36,7 @@ export async function retrieveChunks(userQuery, topK = 5) {
     const result = await pool.query(
       `SELECT content, url, title
        FROM doc_chunks
+       WHERE scraper_version = 'v2'
        ORDER BY embedding <=> $1
        LIMIT $2`,
       [embeddingVector, topK]
@@ -48,4 +49,29 @@ export async function retrieveChunks(userQuery, topK = 5) {
   } finally {
     await pool.end();
   }
+}
+
+export function buildRetrievalQuery(userMessage, conversationHistory) {
+  if (userMessage.length > 20) return userMessage;
+
+  // Find last assistant message
+  const lastAssistant = [...conversationHistory]
+    .reverse()
+    .find(h => h.role === 'assistant');
+
+  // Extract Next step tip if present
+  const nextStepMatch = lastAssistant?.text?.match(/💡 Next step:\s*(.+)/i);
+
+  if (nextStepMatch) {
+    return `${nextStepMatch[1]} ${userMessage}`;
+  }
+
+  // Fallback to last user message
+  const lastUser = [...conversationHistory]
+    .reverse()
+    .find(h => h.role === 'user');
+
+  return lastUser?.text
+    ? `${lastUser.text} ${userMessage}`
+    : userMessage;
 }
